@@ -1,0 +1,74 @@
+[tool.poetry]
+name = "despot"
+version = "0.1.0"
+description = ""
+authors = ["Drunkon Tee <tee0ut4vee5oesae@firemail.cc>"]
+license = "Unlicense"
+readme = "README.md"
+repository = "https://codeberg.org/drunkontee/despot.git"
+
+[tool.poetry.scripts]
+despot = 'despot.cli:main'
+
+[tool.poetry.dependencies]
+python = "^3.12"
+librespot = { git = "https://codeberg.org/drunkontee/librespot-python.git", rev = "66edd42af0" }
+rich-click = "^1.7.2"
+loguru = "^0.7.2"
+mutagen = "^1.47.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.8"
+ipython = "^8.18.1"
+ipdb = "^0.13.13"
+pre-commit = "^3.6.0"
+bump-my-version = "^0.15.0"
+
+mypy = "^1.7.1"
+types-requests = "^2.31.0.10"
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+extend-select = [
+    "I",
+    "B",
+    "A",
+    "ISC",
+    "Q",
+    "TID",
+    "C4",
+    "SIM",
+    "C90",
+]
+ignore = [
+    "SIM108",
+    "ISC001"
+]
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.mypy]
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict_optional = true
+
+[[tool.mypy.overrides]]
+module = "librespot.*"
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
