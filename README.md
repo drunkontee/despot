@@ -1,6 +1,12 @@
 # Despot
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+![version](https://img.shields.io/endpoint?url=https://codeberg.org/drunkontee/despot/raw/branch/main/.badges/version.json)
+![python](https://img.shields.io/endpoint?url=https://codeberg.org/drunkontee/despot/raw/branch/main/.badges/python.json)
+[![unlicense](https://img.shields.io/badge/license-Unlicense-7cd958)](https://codeberg.org/drunkontee/despot/src/branch/main/LICENSE)
+
+[![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://docs.astral.sh/ruff/)
+[![poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/docs/)
+[![pre-commit](https://img.shields.io/badge/-pre--commit-f8b424?logo=pre-commit&labelColor=grey)](https://github.com/pre-commit/pre-commit)
 
 A simple client to download music from that green streaming service.
 
@@ -9,7 +15,7 @@ A simple client to download music from that green streaming service.
 Install via [pipx](https://pipx.pypa.io/stable/):
 
 ```bash
-pipx install https://codeberg.org/drunkontee/despot.git
+pipx install --index-url https://codeberg.org/api/packages/drunkontee/pypi/simple/ despot
 ```
 
 Download songs like so:
