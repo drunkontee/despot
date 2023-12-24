@@ -11,7 +11,7 @@ repository = "https://codeberg.org/drunkontee/despot.git"
 despot = 'despot.cli:main'
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 librespot = { git = "https://codeberg.org/drunkontee/librespot-python.git", rev = "66edd42af0" }
 rich-click = "^1.7.2"
 loguru = "^0.7.2"
@@ -46,7 +46,7 @@ replace = "\"v{new_version}\""
 
 [tool.ruff]
 line-length = 120
-target-version = "py39"
+target-version = "py310"
 extend-select = [
     "I",
     "B",

@@ -52,14 +52,14 @@ class DownloadableTrack:
     @property
     def task_description(self) -> str:
         if isinstance(self.track_id, EpisodeId):
-            return f"[blue]{self.metadata.get("publish_time")}[/] {self.metadata.get("name")}"
+            return f"[blue]{self.metadata.get('publish_time')}[/] {self.metadata.get('name')}"
         return self.metadata.get("name")
 
     @property
     def header_description(self) -> str:
         if isinstance(self.track_id, EpisodeId):
-            return f"episode '{self.metadata.get("name")}' of {self.metadata.get("show")}"
-        return f"song '{self.metadata.get("name")}' by {self.metadata.get("artist")}"
+            return f"episode '{self.metadata.get('name')}' of {self.metadata.get('show')}"
+        return f"song '{self.metadata.get('name')}' by {self.metadata.get('artist')}"
 
     @cached_property
     def temp_filename(self) -> Path:

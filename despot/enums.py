@@ -1,12 +1,15 @@
 import enum
 
 
-class ItemType(enum.StrEnum):
+class ItemType(str, enum.Enum):
     TRACK = "track"
     EPISODE = "episode"
     ALBUM = "album"
     ARTIST = "artist"
     SHOW = "show"
+
+    def __str__(self) -> str:
+        return str(self.value)
 
     @classmethod
     def human_names(cls, conn: str = "or") -> str:
