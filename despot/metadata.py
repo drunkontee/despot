@@ -20,7 +20,7 @@ MetadataType = TypeVar("MetadataType", Metadata.Track, Metadata.Episode)
 _PROPERTY_MAP_TRACK: dict[str, Callable[[Metadata.Track], str | int]] = {
     "name": lambda x: x.name,
     "artist": lambda x: format_artist(x.artist),
-    "album": lambda x: format_artist(x.album.name),
+    "album": lambda x: x.album.name,
     "album_artist": lambda x: format_artist(x.album.artist),
     "album_year": lambda x: x.album.date.year,
     "disc": lambda x: x.disc_number,
