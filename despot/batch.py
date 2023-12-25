@@ -1,29 +1,27 @@
-from __future__ import annotations
-
 import pathlib
 import shutil
 from concurrent.futures import Future, ThreadPoolExecutor
 from http import HTTPStatus
+from io import BufferedWriter
 from threading import Event, Lock
+from time import sleep, time
 from typing import Iterator
 
 from click import Abort
-from librespot.audio import PlayableContentFeeder
+from librespot.audio import ChannelManager, PlayableContentFeeder
 from librespot.audio.decoders import VorbisOnlyAudioQuality
 from librespot.core import ApiClient, Session
 from librespot.metadata import EpisodeId, TrackId
 from rich.console import Console
+from rich.filesize import decimal as decimal_filesize
 from rich.progress import Progress, TaskID
 
 from .config import Config
-from .constants import CHUNK_SIZE, OGG_HEADER_SIZE, RICH_PROGRESS_COLUMNS
+from .constants import OGG_HEADER_SIZE, RICH_PROGRESS_COLUMNS
 from .enums import ItemType
 from .exceptions import ContentUnavailableError, StreamError
 from .logging import logger
 from .models import DownloadableBatch, DownloadableTrack, ProcessingResult
-
-# class Executor(Protocol):
-#     def submit(s)
 
 
 class BatchProcessor:
@@ -43,7 +41,8 @@ class BatchProcessor:
 
     def __init__(self, config: Config, session: Session, console: Console | None = None) -> None:
         self.config = config
-        self._executor = ThreadPoolExecutor(max_workers=config.concurrency)
+
+        self._executor = ThreadPoolExecutor(max_workers=1 if config.paranoia else config.concurrency)
         self._lock = Lock()
         self._stop = Event()
         self._console = console or Console(quiet=True)
@@ -118,16 +117,17 @@ class BatchProcessor:
             self._progress.update(task, description=track.task_description, total=total_size, visible=True)
             logger.debug("Downloading to {}", track.temp_filename)
             track.target_filename.parent.mkdir(parents=True, exist_ok=True)
-            chunks_read = 0
             with self._lock:
                 self._tempfiles.append(track.temp_filename)
             with track.temp_filename.open("wb") as fp:
-                while chunk := stream.input_stream.stream().read(CHUNK_SIZE):
-                    if self._stop.is_set():
-                        return result
-                    chunks_read += 1
-                    written = fp.write(chunk)
-                    self._progress.update(task, advance=written)
+                if (download_duration := self._write_from_stream(fp, stream=stream, task=task)) == -1:
+                    return result
+                logger.debug(
+                    "Done, {} took {:.2f} seconds to download ({}/s)",
+                    track.temp_filename,
+                    download_duration,
+                    decimal_filesize(total_size / download_duration),
+                )
 
             track.metadata.write_tags(track.temp_filename)
             logger.debug("Moving temp file to {}", track.target_filename)
@@ -144,6 +144,22 @@ class BatchProcessor:
                 raise Abort from exc
 
         return result
+
+    def _write_from_stream(self, fp: BufferedWriter, stream: PlayableContentFeeder.LoadedStream, task: TaskID) -> float:
+        start = next_chunk_start = time()
+        while chunk := stream.input_stream.stream().read(ChannelManager.chunk_size):
+            written = fp.write(chunk)
+            self._progress.update(task, advance=written)
+            chunk_duration = time() - next_chunk_start
+            next_chunk_start = time()
+
+            if self._stop.is_set():
+                logger.debug("Stop event is set, bailing.")
+                return -1
+
+            if self.config.paranoia:
+                sleep(max(1 - chunk_duration, 0))
+        return time() - start
 
     def _bail_condition(self, *, task: TaskID, track: DownloadableTrack) -> bool:
         prefix = ""

@@ -24,7 +24,6 @@ CACHE_HOME = _resolve_cache_home()
 DATETIME_FORMAT = "%Y-%m-%d"
 
 OGG_HEADER_SIZE = 0xA7
-CHUNK_SIZE = 128 * 1024 * 8
 
 RICH_PROGRESS_COLUMNS = (
     progress.SpinnerColumn(finished_text="[bar.finished]✔️"),

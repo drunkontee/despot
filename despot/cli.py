@@ -38,6 +38,7 @@ click.rich_click.OPTION_GROUPS = {
         {
             "name": "Processing parameters",
             "options": [
+                "--paranoia",
                 "--overwrite",
                 "--concurrency",
             ],
@@ -99,6 +100,14 @@ click.rich_click.OPTION_GROUPS = {
     show_default=True,
     callback=lambda ctx, param, value: AudioQuality(value),
     help="Audio quality to download",
+)
+@click.option(
+    "-P",
+    "--paranoia",
+    type=bool,
+    default=DEFAULT_CONFIG.paranoia,
+    is_flag=True,
+    help="Paranoia mode, download files one by one at ~128KB/s (implies --concurrency=1)",
 )
 @click.option(
     "-o",
