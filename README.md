@@ -12,6 +12,8 @@ A simple client to download music from that green streaming service.
 
 ## Setup and usage
 
+Despot requires Python 3.10 or above.
+
 Install via [pipx](https://pipx.pypa.io/stable/):
 
 ```bash
