@@ -49,12 +49,10 @@ class WrappedMetadata(Generic[MetadataType]):
         if getter := self.propmap.get(name):
             with suppress(AttributeError):
                 value = getter(self._metadata)
-        if isinstance(value, str):
-            return make_safe_filename(value)
         return value
 
     def _to_filename_parts(self) -> dict[str, str | int]:
-        return {key: self.get(key) for key in self.propmap}
+        return {key: make_safe_filename(self.get(key)) for key in self.propmap}
 
     def generate_filename(self, destination: Path, originating_type: ItemType, ext: str) -> Path:
         match originating_type:
@@ -68,28 +66,32 @@ class WrappedMetadata(Generic[MetadataType]):
                 raise NotImplementedError
         try:
             return destination / tmpl.format(**self._to_filename_parts(), ext=ext)
-        except ValueError as exc:
-            breakpoint()
-            raise FilenameTemplateError(f"Invalid field '{exc.args[0]}' for {originating_type} filename") from exc
-        except KeyError as exc:
+        except (ValueError, KeyError) as exc:
             raise FilenameTemplateError(f"Invalid field '{exc.args[0]}' for {originating_type} filename") from exc
 
-    def _to_tags(self) -> dict[str, Any]:
-        return {
-            "TITLE": self._metadata.name,
-            "ARTIST": [a.name for a in self._metadata.artist],
-            "ALBUMARTIST": [a.name for a in self._metadata.album.artist],
-            "ALBUM": self._metadata.album.name,
-            "DATE": format_date(self._metadata.album.date),
-            "TRACKNUMBER": str(self._metadata.number),
-            "DISCNUMBER": str(self._metadata.disc_number),
-        }
+    def _to_tags(self) -> dict[str, str | list[str]]:
+        match self._metadata:
+            case Metadata.Episode():
+                return {
+                    "TITLE": self.get("name"),
+                    "ARTIST": [self.get("show")],
+                    "ALBUMARTIST": [self.get("show")],
+                    "ALBUM": [self.get("show")],
+                    "DATE": self.get("publish_time"),
+                }
+            case Metadata.Track():
+                return {
+                    "TITLE": self.get("name"),
+                    "ARTIST": [a.name for a in self._metadata.artist],
+                    "ALBUMARTIST": [a.name for a in self._metadata.album.artist],
+                    "ALBUM": self.get("album"),
+                    "DATE": format_date(self._metadata.album.date),
+                    "TRACKNUMBER": str(self.get("number")),
+                    "DISCNUMBER": str(self.get("disc_number")),
+                }
+        raise NotImplementedError
 
     def write_tags(self, filename: Path) -> None:
-        if isinstance(self._metadata, Metadata.Episode):
-            # Skip writing tags for podcasts for now
-            return
-
         obj = OggVorbis(filename)
         obj.update(self._to_tags())
         logger.debug("Writing tags to {}", filename)

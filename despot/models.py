@@ -64,7 +64,7 @@ class DownloadableTrack:
     @cached_property
     def temp_filename(self) -> Path:
         target = self.target_filename
-        return target.with_stem("." + target.stem)
+        return target.with_stem("." + target.stem).with_suffix(".part")
 
 
 @dataclass

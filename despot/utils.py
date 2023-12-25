@@ -25,11 +25,11 @@ def make_safe_filename(value: T) -> T:
 def get_filename_ext(codec: SuperAudioFormat) -> str:
     match codec:
         case SuperAudioFormat.MP3:
-            return ".mp3"
+            return "mp3"
         case SuperAudioFormat.VORBIS:
-            return ".ogg"
+            return "ogg"
         case SuperAudioFormat.AAC:
-            return ".m4a"
+            return "m4a"
     raise NotImplementedError
 
 
