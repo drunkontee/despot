@@ -5,6 +5,7 @@ import rich_click as click
 from librespot.audio.decoders import AudioQuality
 
 from . import __name__ as name
+from . import __version__ as version
 from .base import Despot
 from .config import DEFAULT_CONFIG, Config
 from .constants import ENVVAR_PREFIX, _fcbgvsl
@@ -53,6 +54,7 @@ click.rich_click.OPTION_GROUPS = {
         "help_option_names": ["-h", "--help"],
     },
     help=f"Download music from {_fcbgvsl.title()} using the sharing link of any {ItemType.human_names()}.",
+    no_args_is_help=True,
 )
 @click.argument(
     "links",
@@ -90,6 +92,7 @@ click.rich_click.OPTION_GROUPS = {
     show_default=True,
     required=False,
     default=DEFAULT_CONFIG.destination,
+    show_envvar=True,
     help="Directory to which to download the files",
 )
 @click.option(
@@ -99,6 +102,7 @@ click.rich_click.OPTION_GROUPS = {
     default=DEFAULT_CONFIG.quality,
     show_default=True,
     callback=lambda ctx, param, value: AudioQuality(value),
+    show_envvar=True,
     help="Audio quality to download",
 )
 @click.option(
@@ -107,6 +111,7 @@ click.rich_click.OPTION_GROUPS = {
     type=bool,
     default=DEFAULT_CONFIG.paranoia,
     is_flag=True,
+    show_envvar=True,
     help="Paranoia mode, download files one by one at ~128KB/s (implies --concurrency=1)",
 )
 @click.option(
@@ -115,6 +120,7 @@ click.rich_click.OPTION_GROUPS = {
     type=bool,
     default=DEFAULT_CONFIG.overwrite,
     is_flag=True,
+    show_envvar=True,
     help="Overwrite existing files",
 )
 @click.option(
@@ -123,6 +129,7 @@ click.rich_click.OPTION_GROUPS = {
     type=bool,
     default=DEFAULT_CONFIG.newest_first,
     is_flag=True,
+    show_envvar=True,
     help="Download episodes in descending order of publishing instead of ascending",
 )
 @click.option(
@@ -131,6 +138,7 @@ click.rich_click.OPTION_GROUPS = {
     type=int,
     default=DEFAULT_CONFIG.concurrency,
     show_default=True,
+    show_envvar=True,
     help="Maximum number of simultaneous downloads",
 )
 @click.option(
@@ -158,10 +166,10 @@ click.rich_click.OPTION_GROUPS = {
     help="Abort at the first error. Useful together with --debug.",
 )
 @click.version_option(
-    None,
+    version,
     "-V",
     "--version",
-    prog_name=__name__,
+    prog_name=name,
 )
 @click.pass_context
 def main(ctx: click.RichContext, links: list[str], **kwargs: Any) -> int:
@@ -169,3 +177,7 @@ def main(ctx: click.RichContext, links: list[str], **kwargs: Any) -> int:
     configure_logging(config.debug)
     d = Despot(config, ctx=ctx)
     return d.download(links)[0]
+
+
+if __name__ == "__main__":
+    main.main(prog_name=name)

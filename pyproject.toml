@@ -23,9 +23,7 @@ ipython = "^8.18.1"
 ipdb = "^0.13.13"
 pre-commit = "^3.6.0"
 bump-my-version = "^0.15.0"
-
 mypy = "^1.7.1"
-types-requests = "^2.31.0.10"
 
 
 [tool.bumpversion]
@@ -43,7 +41,10 @@ filename = ".badges/version.json"
 search = "\"v{current_version}\""
 replace = "\"v{new_version}\""
 
-
+[[tool.bumpversion.files]]
+filename = "despot/__init__.py"
+search = "\"v{current_version}\""
+replace = "\"v{new_version}\""
 
 
 [tool.ruff]
