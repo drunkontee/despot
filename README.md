@@ -10,7 +10,7 @@
 
 A simple client to download music from that green streaming service.
 
-## Setup and usage
+## Setup
 
 Despot requires Python 3.10 or above.
 
@@ -20,13 +20,24 @@ Install via [pipx](https://pipx.pypa.io/stable/):
 pipx install --index-url https://codeberg.org/api/packages/drunkontee/pypi/simple/ despot
 ```
 
+Despot follows [semver](https://semver.org/spec/v2.0.0.html) versioning. It is also available as container image `codeberg.org/drunkontee/despot`. Images are tagged as `v1.2.3`, `v1.2`, and `v1`, as well as `latest` pointing to the most recent version, for example:
+
+```bash
+docker run --tty --rm codeberg.org/drunkontee/despot:v0
+docker run --tty --rm codeberg.org/drunkontee/despot:v0.3
+docker run --tty --rm codeberg.org/drunkontee/despot:v0.3.0
+docker run --tty --rm codeberg.org/drunkontee/despot:latest
+```
+
+## Usage
+
 Download songs like so:
 
 ```bash
 despot https://open.….com/track/07ZCaJfuutIaoDxYrkdzQY
 ```
 
-Partial URLs (just the path) work just fine, too.
+You can pass multiple URLs at once. Partial URLs (just the path) work, too:
 
 ```bash
 despot /track/07ZCaJfuutIaoDxYrkdzQY

@@ -46,7 +46,20 @@ filename = "despot/__init__.py"
 search = "\"v{current_version}\""
 replace = "\"v{new_version}\""
 
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "despot:v{current_version}"
+replace = "despot:v{new_version}"
 
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "despot:v{current_major}.{current_minor}"
+replace = "despot:v{new_major}.{new_minor}"
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "despot:v{current_major}"
+replace = "despot:v{new_major}"
 
 [tool.ruff]
 line-length = 120
