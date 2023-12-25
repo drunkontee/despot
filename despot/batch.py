@@ -48,6 +48,7 @@ class BatchProcessor:
         self._console = console or Console(quiet=True)
         self._content_feeder = session.content_feeder()
         self._quality_picker = VorbisOnlyAudioQuality(config.quality)
+        self._tempfiles = []
 
     def shutdown(self) -> None:
         self._stop.set()

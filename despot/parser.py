@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from librespot.core import ApiClient, Session
 
 _RE_ITEM_ID = r"/?(?P<item_id>[0-9a-zA-Z]{22})(?:\?si=.+?)?$"
-_RE_ITEM_TYPE = r"/?(?P<item_type>[a-z]+)"
+_RE_ITEM_TYPE = rf"/?(?P<item_type>{'|'.join(ItemType)})"
 
 ITEM_ID_RE = re.compile(_RE_ITEM_ID)
 ITEM_PATH_RE = re.compile(_RE_ITEM_TYPE + _RE_ITEM_ID)
@@ -37,8 +37,6 @@ class LinkParser:
 
     def parse(self, *, uri_or_link: str) -> Iterator[DownloadableBatch]:
         logger.debug("Parsing link {}", uri_or_link)
-        item_type = ""
-        item_id = ""
         if uri_or_link.startswith(_fcbgvsl + ":"):
             _, item_type, item_id = uri_or_link.split(":")
         elif (match := ITEM_URL_RE.match(uri_or_link)) or (match := ITEM_PATH_RE.match(uri_or_link)):
@@ -46,6 +44,9 @@ class LinkParser:
         elif match := ITEM_ID_RE.match(uri_or_link):
             item_id = match.group("item_id")
             item_type = "track"
+        else:
+            logger.error("Invalid link: {}", uri_or_link)
+            return []
 
         item_gid = self.get_hex_gid(item_id)
         current_type = ItemType(item_type)
@@ -72,7 +73,7 @@ class LinkParser:
             case ItemType.ARTIST:
                 yield from self._parse_artist(item_gid)
             case _:
-                logger.error("Invalid link : {}", uri_or_link)
+                raise NotImplementedError
 
     @staticmethod
     def get_hex_gid(url_id: str) -> str:
