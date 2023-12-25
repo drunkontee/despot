@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "despot"
-version = "0.3.0"
+version = "0.3.1"
 description = ""
 authors = ["Drunkon Tee <tee0ut4vee5oesae@firemail.cc>"]
 license = "Unlicense"
@@ -27,7 +27,7 @@ mypy = "^1.7.1"
 
 
 [tool.bumpversion]
-current_version = "0.3.0"
+current_version = "0.3.1"
 commit = true
 tag = true
 
@@ -61,6 +61,7 @@ filename = "README.md"
 search = "despot:v{current_major}"
 replace = "despot:v{new_major}"
 
+
 [tool.ruff]
 line-length = 120
 target-version = "py310"
@@ -91,6 +92,7 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = "librespot.*"
 ignore_missing_imports = true
+
 
 
 

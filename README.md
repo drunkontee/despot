@@ -25,7 +25,7 @@ Despot follows [semver](https://semver.org/spec/v2.0.0.html) versioning. It is a
 ```bash
 docker run --tty --rm codeberg.org/drunkontee/despot:v0
 docker run --tty --rm codeberg.org/drunkontee/despot:v0.3
-docker run --tty --rm codeberg.org/drunkontee/despot:v0.3.0
+docker run --tty --rm codeberg.org/drunkontee/despot:v0.3.1
 docker run --tty --rm codeberg.org/drunkontee/despot:latest
 ```
 
