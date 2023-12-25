@@ -86,8 +86,8 @@ class WrappedMetadata(Generic[MetadataType]):
                     "ALBUMARTIST": [a.name for a in self._metadata.album.artist],
                     "ALBUM": self.get("album"),
                     "DATE": format_date(self._metadata.album.date),
-                    "TRACKNUMBER": str(self.get("number")),
-                    "DISCNUMBER": str(self.get("disc_number")),
+                    "TRACK": str(self.get("track")),
+                    "DISCNUMBER": str(self.get("disc")),
                 }
         raise NotImplementedError
 
