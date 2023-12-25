@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "despot"
-version = "0.1.1"
+version = "0.2.0"
 description = ""
 authors = ["Drunkon Tee <tee0ut4vee5oesae@firemail.cc>"]
 license = "Unlicense"
@@ -29,7 +29,7 @@ types-requests = "^2.31.0.10"
 
 
 [tool.bumpversion]
-current_version = "0.1.1"
+current_version = "0.2.0"
 commit = true
 tag = true
 
@@ -42,6 +42,7 @@ replace = "version = \"{new_version}\""
 filename = ".badges/version.json"
 search = "\"v{current_version}\""
 replace = "\"v{new_version}\""
+
 
 
 
@@ -75,6 +76,7 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = "librespot.*"
 ignore_missing_imports = true
+
 
 
 [build-system]
