@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "despot"
-version = "0.3.2"
+version = "0.4.0"
 description = ""
 authors = ["Drunkon Tee <tee0ut4vee5oesae@firemail.cc>"]
 license = "Unlicense"
@@ -28,7 +28,7 @@ rich-codex = "^1.2.6"
 
 
 [tool.bumpversion]
-current_version = "0.3.2"
+current_version = "0.4.0"
 commit = true
 tag = true
 
@@ -64,6 +64,7 @@ replace = "despot:v{new_major}"
 
 
 
+
 [tool.ruff]
 line-length = 120
 target-version = "py310"
@@ -94,6 +95,7 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = "librespot.*"
 ignore_missing_imports = true
+
 
 
 
