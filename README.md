@@ -10,6 +10,8 @@
 
 A simple client to download music from that green streaming service.
 
+![despot demo](.assets/demo.gif)
+
 ## Setup
 
 Despot requires Python 3.10 or above.

@@ -101,13 +101,15 @@ class BatchProcessor:
     ) -> ProcessingResult:
         has_header = False
         result = ProcessingResult(track=track)
-        task = self._progress.add_task("", visible=False, batch_idx=batch_idx + 1, batch_size=batch_size)
+        if batch_idx == 0:
+            self._console.print()
+        task = self._progress.add_task("", total=None, batch_idx=batch_idx + 1, batch_size=batch_size)
         try:
             stream = self._load_stream(track_id=track.track_id)
             track.populate_metadata(stream, destination=self.config.destination)
             if batch_idx == 0:
                 self._console.print(
-                    f"\n[bold bright_magenta]Downloading {batch_description or track.header_description}[/]\n"
+                    f"[bold bright_magenta]Downloading {batch_description or track.header_description}[/]\n"
                 )
             has_header = True
 
@@ -137,7 +139,7 @@ class BatchProcessor:
         except Exception as exc:
             result.exception = exc
             if track.originating_type in (ItemType.EPISODE, ItemType.TRACK) and not has_header:
-                self._console.print(f"\n[bold red]<Unknown {track.originating_type} {track.track_id.hex_id()}>[/]\n")
+                self._console.print(f"[bold red]<Unknown {track.originating_type} {track.track_id.hex_id()}>[/]\n")
             self._progress.update(task, description=f"[red]<{exc}>", visible=True)
             if self.config.debug:
                 logger.opt(exception=exc).debug("Failure during download")

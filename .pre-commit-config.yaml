@@ -20,6 +20,7 @@ repos:
       - id: debug-statements
       - id: check-added-large-files
         args: ['--maxkb=96']
+        exclude: .assets/demo.gif
       - id: check-ast
 
   - repo: https://github.com/pre-commit/pygrep-hooks

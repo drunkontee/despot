@@ -42,7 +42,7 @@ class Despot:
         self._batch_processor = BatchProcessor(config=self.config, session=session, console=self.console)
 
     def _get_session(self) -> Session:
-        with self.console.status(f"Authenticating as {self.config.username}"):
+        with self.console.status("Authenticating"):
             CACHE_HOME.mkdir(parents=True, exist_ok=True)
             credentials_file = CACHE_HOME / "credentials.json"
             config = (
@@ -67,9 +67,13 @@ class Despot:
     def download(self, links: str | list[str]) -> tuple[int, list[ProcessingResult]]:
         if isinstance(links, str):
             links = [links]
-        return self._batch_processor.failures, list(
-            itertools.chain.from_iterable((self._parse_and_download(link) for link in links))
-        )
+        results = list(itertools.chain.from_iterable((self._parse_and_download(link) for link in links)))
+
+        if (failures := self._batch_processor.failures) > 0:
+            self.console.print(f"\n[red]Done with {failures} failure{'s' if failures>1 else ''}.\n")
+        else:
+            self.console.print("\n[bar.finished]Done.\n")
+        return self._batch_processor.failures, results
 
     def _parse_and_download(self, link: str) -> Iterator[ProcessingResult]:
         for batch in self._link_parser.parse(uri_or_link=link):

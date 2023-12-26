@@ -21,7 +21,7 @@ _RE_ITEM_TYPE = rf"/?(?P<item_type>{'|'.join(ItemType)})"
 
 ITEM_ID_RE = re.compile(_RE_ITEM_ID)
 ITEM_PATH_RE = re.compile(_RE_ITEM_TYPE + _RE_ITEM_ID)
-ITEM_URL_RE = re.compile(rf"^(?:https?://)?open\.{_fcbgvsl}\.com" + _RE_ITEM_TYPE + _RE_ITEM_ID)
+ITEM_URL_RE = re.compile(r"^(?:https?://)?open\.\w+\.com" + _RE_ITEM_TYPE + _RE_ITEM_ID)
 
 
 _base62 = Base62.create_instance_with_inverted_character_set()
@@ -90,7 +90,10 @@ class LinkParser:
     def _parse_album(self, gid: bytes | str, originating_type: ItemType = ItemType.ALBUM) -> DownloadableBatch:
         if isinstance(gid, bytes):
             gid = bytes_to_hex(gid)
-        metadata = self._api.get_metadata_4_album(AlbumId(gid))
+
+        with self._console.status("Fetching album metadata"):
+            metadata = self._api.get_metadata_4_album(AlbumId(gid))
+
         artist = format_artist(metadata.artist)
         return DownloadableBatch(
             type=ItemType.ALBUM,
@@ -103,7 +106,9 @@ class LinkParser:
         )
 
     def _parse_show(self, gid: str, originating_type: ItemType = ItemType.SHOW) -> DownloadableBatch:
-        metadata = self._api.get_metadata_4_show(ShowId(gid))
+        with self._console.status("Fetching show metadata"):
+            metadata = self._api.get_metadata_4_show(ShowId(gid))
+
         return DownloadableBatch(
             type=ItemType.SHOW,
             tracks=[
@@ -114,7 +119,9 @@ class LinkParser:
         )
 
     def _parse_artist(self, gid: str, originating_type: ItemType = ItemType.ARTIST) -> Iterator[DownloadableBatch]:
-        metadata = self._api.get_metadata_4_artist(ArtistId(gid))
+        with self._console.status("Fetching artist metadata"):
+            metadata = self._api.get_metadata_4_artist(ArtistId(gid))
+
         for album_group in metadata.album_group:
             for album in album_group.album:
                 yield self._parse_album(bytes_to_hex(album.gid), originating_type=originating_type)
