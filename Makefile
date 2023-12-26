@@ -22,3 +22,14 @@ build:
 .PHONY: build-push
 build-push: .buildx-builder
 	@$(MAKE) build BUILD_ARGS='$(BUILD_ARGS) --push --builder crossplatform --platform $(PLATFORMS)'
+
+.PHONY: rich-codex
+rich-codex:
+	rm -rf .assets/.created.txt .assets/.deleted.txt
+	FORCE_COLOR=1 TERMINAL_WIDTH=140 rich-codex \
+	--skip-git-checks \
+	--no-confirm \
+	--terminal-theme DIMMED_MONOKAI \
+	--created-files .assets/.created.txt \
+	--deleted-files .assets/.deleted.txt
+	if [[ -f .assets/.created.txt || -f .assets/.deleted.txt ]]; then exit 1; fi

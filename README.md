@@ -45,7 +45,9 @@ despot /track/07ZCaJfuutIaoDxYrkdzQY
 
 By default, despot will place files in `./downloads`. You can use `--destination` to change the destination directory.
 
-Use `--help` to see all other available options.
+Use `--help` to see all other available options:
+
+![`despot --help`](.assets/despot-help.svg)
 
 ## Notes
 

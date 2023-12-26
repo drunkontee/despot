@@ -6,7 +6,7 @@ from .models import AudioQuality
 
 @dataclass
 class Config:
-    destination: Path = Path.cwd() / "downloads"
+    destination: Path = Path("./downloads")
     quality: AudioQuality = AudioQuality.VERY_HIGH.name
     debug: bool = False
     fail_early: bool = False

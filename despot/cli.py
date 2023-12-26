@@ -8,7 +8,7 @@ from . import __name__ as name
 from . import __version__ as version
 from .base import Despot
 from .config import DEFAULT_CONFIG, Config
-from .constants import ENVVAR_PREFIX, _fcbgvsl
+from .constants import ENVVAR_PREFIX
 from .enums import ItemType
 from .logging import configure_logging
 
@@ -53,7 +53,7 @@ click.rich_click.OPTION_GROUPS = {
         "auto_envvar_prefix": ENVVAR_PREFIX,
         "help_option_names": ["-h", "--help"],
     },
-    help=f"Download music from {_fcbgvsl.title()} using the sharing link of any {ItemType.human_names()}.",
+    help=f"Download music from that green streaming service using the sharing link of any {ItemType.human_names()}.",
     no_args_is_help=True,
 )
 @click.argument(

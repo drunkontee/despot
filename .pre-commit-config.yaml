@@ -15,10 +15,11 @@ repos:
     rev: 'v4.4.0'
     hooks:
       - id: trailing-whitespace
+        exclude_types: [svg]
       - id: end-of-file-fixer
       - id: debug-statements
       - id: check-added-large-files
-        args: ['--maxkb=10']
+        args: ['--maxkb=96']
       - id: check-ast
 
   - repo: https://github.com/pre-commit/pygrep-hooks
@@ -31,3 +32,12 @@ repos:
     rev: '1.7.1'
     hooks:
       - id: poetry-check
+
+  - repo: local
+    hooks:
+      - id: rich-codex
+        name: rich-codex
+        language: system
+        entry: make rich-codex
+        pass_filenames: false
+        types: [markdown]

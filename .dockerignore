@@ -5,3 +5,4 @@ poetry.lock
 poetry.toml
 .ruff_cache/
 .docker/
+.assets/
