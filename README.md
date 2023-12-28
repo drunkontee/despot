@@ -58,6 +58,7 @@ Use `--help` to see all other available options:
   * Singular Tracks: `{artist} - {title}.{ext}`
   * Entire shows/podcasts and singular episodes: `{show}/{publish_time} - {o.title}.{ext}`
   * Albums and entire arists: `{album_artist}/{album} ({album_year})/{disc:02d}-{track:02d} {title}.{ext}`
+  * Playlists: `{playlist_name}/{idx:03d} {artist_or_show} - {name}.{ext}`
 
     These are the only patterns. Deal with it.
 

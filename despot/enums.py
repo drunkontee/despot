@@ -7,6 +7,7 @@ class ItemType(str, enum.Enum):
     ALBUM = "album"
     ARTIST = "artist"
     SHOW = "show"
+    PLAYLIST = "playlist"
 
     def __str__(self) -> str:
         return str(self.value)

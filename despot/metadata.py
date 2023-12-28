@@ -20,6 +20,7 @@ MetadataType = TypeVar("MetadataType", Metadata.Track, Metadata.Episode)
 _PROPERTY_MAP_TRACK: dict[str, Callable[[Metadata.Track], str | int]] = {
     "name": lambda x: x.name,
     "artist": lambda x: format_artist(x.artist),
+    "artist_or_show": lambda x: format_artist(x.artist),
     "album": lambda x: x.album.name,
     "album_artist": lambda x: format_artist(x.album.artist),
     "album_year": lambda x: x.album.date.year,
@@ -30,6 +31,7 @@ _PROPERTY_MAP_TRACK: dict[str, Callable[[Metadata.Track], str | int]] = {
 _PROPERTY_MAP_EPISODE: dict[str, Callable[[Metadata.Episode], str | int]] = {
     "name": lambda x: x.name,
     "show": lambda x: x.show.name,
+    "artist_or_show": lambda x: x.show.name,
     "publish_time": lambda x: format_date(x.publish_time),
 }
 
@@ -54,7 +56,9 @@ class WrappedMetadata(Generic[MetadataType]):
     def _to_filename_parts(self) -> dict[str, str | int]:
         return {key: make_safe_filename(self.get(key)) for key in self.propmap}
 
-    def generate_filename(self, destination: Path, originating_type: ItemType, ext: str) -> Path:
+    def generate_filename(
+        self, destination: Path, originating_type: ItemType, ext: str, **filename_attrs: str | int
+    ) -> Path:
         match originating_type:
             case ItemType.TRACK:
                 tmpl = "{artist} - {name}.{ext}"
@@ -62,10 +66,16 @@ class WrappedMetadata(Generic[MetadataType]):
                 tmpl = "{show}/{publish_time} - {name}.{ext}"
             case ItemType.ALBUM | ItemType.ARTIST:
                 tmpl = "{album_artist}/{album} ({album_year})/{disc:02d}-{track:02d} {name}.{ext}"
+            case ItemType.PLAYLIST:
+                tmpl = "{playlist_name}/{idx:03d} {artist_or_show} - {name}.{ext}"
             case _:
                 raise NotImplementedError
         try:
-            return destination / tmpl.format(**self._to_filename_parts(), ext=ext)
+            return destination / tmpl.format(
+                **self._to_filename_parts(),
+                **filename_attrs,
+                ext=ext,
+            )
         except (ValueError, KeyError) as exc:
             raise FilenameTemplateError(f"Invalid field '{exc.args[0]}' for {originating_type} filename") from exc
 

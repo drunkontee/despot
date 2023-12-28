@@ -87,6 +87,7 @@ class BatchProcessor:
                 job = self._executor.submit(
                     self._download_track,
                     track=track,
+                    batch_ctx=batch.context,
                     batch_idx=idx,
                     batch_size=batch_size,
                     batch_description=batch.description,
@@ -97,7 +98,13 @@ class BatchProcessor:
                 yield future.result()
 
     def _download_track(
-        self, *, track: DownloadableTrack, batch_idx: int, batch_size: int, batch_description: str | None = None
+        self,
+        *,
+        track: DownloadableTrack,
+        batch_ctx: dict,
+        batch_idx: int,
+        batch_size: int,
+        batch_description: str | None = None,
     ) -> ProcessingResult:
         has_header = False
         result = ProcessingResult(track=track)
@@ -106,7 +113,7 @@ class BatchProcessor:
         task = self._progress.add_task("", total=None, batch_idx=batch_idx + 1, batch_size=batch_size)
         try:
             stream = self._load_stream(track_id=track.track_id)
-            track.populate_metadata(stream, destination=self.config.destination)
+            track.populate_metadata(stream=stream, destination=self.config.destination, idx=batch_idx + 1, **batch_ctx)
             if batch_idx == 0:
                 self._console.print(
                     f"[bold bright_magenta]Downloading {batch_description or track.header_description}[/]\n"

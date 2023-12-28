@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
@@ -37,12 +39,15 @@ class DownloadableTrack:
     metadata: WrappedMetadata = field(init=False, repr=False)
     target_filename: Path = field(init=False, repr=False)
 
-    def populate_metadata(self, stream: PlayableContentFeeder.LoadedStream, destination: Path) -> None:
+    def populate_metadata(
+        self, *, stream: PlayableContentFeeder.LoadedStream, destination: Path, **filename_attrs: str | int
+    ) -> None:
         self.metadata = WrappedMetadata(stream.track or stream.episode)
         self.target_filename = self.metadata.generate_filename(
             destination,
             originating_type=self.originating_type,
             ext=get_filename_ext(stream.input_stream.codec()),
+            **filename_attrs,
         )
 
     @property
@@ -72,6 +77,17 @@ class DownloadableBatch:
     type: ItemType  # noqa: A003
     tracks: list[DownloadableTrack]
     description: str | None
+    context: dict = field(default_factory=dict)
+
+    def __add__(self, other: DownloadableBatch | list[DownloadableBatch]) -> DownloadableBatch:
+        if isinstance(other, DownloadableBatch):
+            self.tracks += other.tracks
+        elif isinstance(other, list):
+            for nested in other:
+                self.tracks += nested.tracks
+        else:
+            raise NotImplementedError
+        return self
 
 
 @dataclass
