@@ -44,9 +44,9 @@ def format_artist(value: Metadata.Artist) -> str:
 def format_date(value: Metadata.Date) -> str:
     return datetime(
         value.year,
-        value.month,
-        value.day,
-        value.hour,
-        value.minute,
+        value.month or 1,
+        value.day or 1,
+        value.hour or 0,
+        value.minute or 0,
         tzinfo=timezone.utc,
     ).strftime(DATETIME_FORMAT)
