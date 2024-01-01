@@ -1,25 +1,24 @@
 # Despot
 
-![version](https://img.shields.io/endpoint?url=https://codeberg.org/drunkontee/despot/raw/branch/main/.badges/version.json)
-![python](https://img.shields.io/endpoint?url=https://codeberg.org/drunkontee/despot/raw/branch/main/.badges/python.json)
+[![version](https://img.shields.io/pypi/v/despot)](https://pypi.org/project/despot/)
+![python](https://img.shields.io/pypi/pyversions/despot)
+[![downloads](https://static.pepy.tech/badge/despot)](https://pepy.tech/project/despot)
 [![unlicense](https://img.shields.io/badge/license-Unlicense-7cd958)](https://codeberg.org/drunkontee/despot/src/branch/main/LICENSE)
 
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://docs.astral.sh/ruff/)
 [![poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/docs/)
 [![pre-commit](https://img.shields.io/badge/-pre--commit-f8b424?logo=pre-commit&labelColor=grey)](https://github.com/pre-commit/pre-commit)
 
-A simple client to download music from that green streaming service.
+A fast and simple client to free your music from that green streaming service.
 
-![despot demo](.assets/demo.gif)
+![despot demo](https://codeberg.org/drunkontee/despot/media/branch/main/.assets/demo.gif)
 
 ## Setup
-
-Despot requires Python 3.10 or above.
 
 Install via [pipx](https://pipx.pypa.io/stable/):
 
 ```bash
-pipx install --index-url https://codeberg.org/api/packages/drunkontee/pypi/simple/ despot
+pipx install despot
 ```
 
 Despot follows [semver](https://semver.org/spec/v2.0.0.html) versioning. It is also available as container image `codeberg.org/drunkontee/despot`. Images are tagged as `v1.2.3`, `v1.2`, and `v1`, as well as `latest` pointing to the most recent version, for example:

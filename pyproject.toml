@@ -1,18 +1,28 @@
 [tool.poetry]
 name = "despot"
 version = "0.5.0"
-description = ""
+description = "A fast and simple client to free your music from that green streaming service"
 authors = ["Drunkon Tee <tee0ut4vee5oesae@firemail.cc>"]
 license = "Unlicense"
 readme = "README.md"
 repository = "https://codeberg.org/drunkontee/despot.git"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Sound/Audio",
+]
+
+[tool.poetry.urls]
+"Bug Reports" = "https://codeberg.org/drunkontee/despot/issues"
 
 [tool.poetry.scripts]
 despot = 'despot.cli:main'
 
 [tool.poetry.dependencies]
 python = "^3.10"
-librespot = { git = "https://codeberg.org/drunkontee/librespot-python.git", rev = "66edd42af0" }
+librespot = "^0.0.9"
 rich-click = "^1.7.2"
 loguru = "^0.7.2"
 mutagen = "^1.47.0"
@@ -63,10 +73,6 @@ search = "despot:v{current_major}"
 replace = "despot:v{new_major}"
 
 
-
-
-
-
 [tool.ruff]
 line-length = 120
 target-version = "py310"
@@ -97,14 +103,6 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = "librespot.*"
 ignore_missing_imports = true
-
-
-
-
-
-
-
-
 
 [build-system]
 requires = ["poetry-core"]
