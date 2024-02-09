@@ -1,7 +1,7 @@
 import codecs
-from os import environ
 from pathlib import Path
 
+from appdirs import user_cache_dir
 from rich import progress
 
 from . import __name__ as name
@@ -9,18 +9,7 @@ from . import __name__ as name
 _fcbgvsl = codecs.encode("fcbgvsl", "rot13")
 
 ENVVAR_PREFIX = name.upper()
-
-
-def _resolve_cache_home() -> Path:
-    if envvar := environ.get(f"{ENVVAR_PREFIX}_HOME"):
-        path = Path(envvar)
-    else:
-        prefix = environ.get("XDG_CACHE_HOME") or "~/.cache"
-        path = Path(prefix) / name
-    return path.expanduser().resolve()
-
-
-CACHE_HOME = _resolve_cache_home()
+CACHE_HOME = Path(user_cache_dir(name, "drunkontee"))
 DATETIME_FORMAT = "%Y-%m-%d"
 
 OGG_HEADER_SIZE = 0xA7
