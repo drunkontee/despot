@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "despot"
-version = "0.5.0"
+version = "0.6.0"
 description = "A fast and simple client to free your music from that green streaming service"
 authors = ["Drunkon Tee <tee0ut4vee5oesae@firemail.cc>"]
 license = "Unlicense"
@@ -39,7 +39,7 @@ rich-codex = "^1.2.6"
 
 
 [tool.bumpversion]
-current_version = "0.5.0"
+current_version = "0.6.0"
 commit = true
 tag = true
 
@@ -74,6 +74,7 @@ search = "despot:v{current_major}"
 replace = "despot:v{new_major}"
 
 
+
 [tool.ruff]
 line-length = 120
 target-version = "py310"
@@ -104,6 +105,7 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = "librespot.*"
 ignore_missing_imports = true
+
 
 [build-system]
 requires = ["poetry-core"]
